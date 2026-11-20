@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>My Apps</title>
+<title>Dusiaclaw's App Carousel</title>
 <meta name="theme-color" content="#12151c">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -42,12 +42,51 @@ a:focus-visible,button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 #dots .on i{width:22px;background:#fff}
 @media(max-height:620px){.info p{min-height:0;font-size:13px}.head img{width:32px;height:32px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+header{align-items:center;gap:10px}
+header h1{flex:1;min-width:0;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#help{flex:none;width:32px;height:32px;border-radius:16px;border:1px solid #ffffff33;background:#ffffff14;color:#f2f4f8;font:700 15px system-ui,sans-serif;cursor:pointer}
+.ov{position:fixed;inset:0;z-index:10;background:radial-gradient(120% 70% at 50% 0%,#2a3550 0%,#12151c 70%);transition:opacity .45s,visibility .45s}
+.ov.hide{opacity:0;visibility:hidden;pointer-events:none}
+#splash{z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px}
+#splash img{width:132px;height:132px;border-radius:30px;box-shadow:0 18px 40px #0009;animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+#splash h1{font-size:26px;line-height:1.15;letter-spacing:-.01em;animation:rise .6s .25s both}
+#splash p{color:#aeb6c6;font-size:14px;animation:rise .6s .4s both}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@keyframes rise{from{transform:translateY(12px);opacity:0}}
+#guide{overflow-y:auto;padding:calc(env(safe-area-inset-top) + 18px) 22px calc(env(safe-area-inset-bottom) + 18px)}
+#guide .in{max-width:420px;min-height:100%;margin:0 auto;display:flex;flex-direction:column}
+.phone{background:linear-gradient(160deg,#3a4f9a,#1b2547);border-radius:24px;padding:16px 14px 16px;position:relative;box-shadow:0 14px 34px #0008}
+.bar{display:flex;justify-content:space-between;font-size:11px;color:#cfd5e2;margin:0 4px 14px;font-variant-numeric:tabular-nums}
+.home{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px;justify-items:center}
+.home div{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:#dfe4ee;width:100%;text-align:center}
+.home img,.home i{width:46px;height:46px;border-radius:12px;display:block}
+.home i{background:#ffffff14}
+.home .new img{box-shadow:0 0 0 3px #1b2547,0 0 0 5px #ffc24d,0 0 22px #ffc24d99}
+.newtag{position:absolute;background:#ffc24d;color:#2a1a00;font-weight:800;font-size:12px;padding:5px 10px;border-radius:10px 10px 10px 2px;animation:rise .5s .2s both}
+#guide h2{font-size:24px;line-height:1.15;letter-spacing:-.01em;margin-top:20px}
+#guide p{color:#c3cad8;font-size:15px;line-height:1.5;margin-top:10px}
+.pill{display:inline-block;background:#2fc4a8;color:#06231e;font-weight:700;font-size:13px;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.kbd{display:inline-block;background:#ffffff22;border-radius:6px;padding:0 7px;font-weight:700}
+#guide .acts{margin-top:auto;padding-top:22px;display:flex;flex-direction:column;gap:10px}
+#guide button.btn{width:100%;border:0;cursor:pointer;font:700 16px system-ui,sans-serif;padding:14px;border-radius:14px;background:#f2f4f8;color:#12151c}
+#guide button.btn.sec{background:#ffffff1c;color:#f2f4f8;font-weight:600}
+#guide button.btn:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){#splash *,.newtag{animation:none!important}}
 </style>
 </head>
 <body>
+<div id="splash" class="ov" aria-hidden="true"><img src="icon-512.png" alt=""><h1>Dusiaclaw's App Carousel</h1><p>All my apps in one place</p></div>
+<div id="guide" class="ov hide" role="dialog" aria-modal="true" aria-labelledby="gT"><div class="in">
+<div class="phone"><div class="bar"><span id="clock"></span><span>▂▄▆ ▮</span></div><div class="home" id="homeGrid"></div><span class="newtag" id="newTag">New!</span></div>
+<h2 id="gT">Put the apps on your home screen</h2>
+<p>Open any app from the carousel, then either tap its own <span class="pill">⬇ Install</span> button (most apps have one, in Settings or on the start screen) or use Chrome's <span class="kbd">⋮</span> menu › <b>Add to Home screen</b>.</p>
+<p>The icon then appears among your apps and opens full screen, like a normal app.</p>
+<div class="acts"><button class="btn sec" id="instSelf" hidden>⬇ Install this carousel</button><button class="btn" id="goApps">See my apps →</button></div>
+</div></div>
 <div id="bg"></div>
 <div class="app">
-<header><h1>My Apps</h1><span id="count"></span></header>
+<header><h1>Dusiaclaw's App Carousel</h1><span id="count"></span><button id="help" aria-label="How to install">?</button></header>
 <main id="track" aria-label="Apps"></main>
 <nav id="dots" aria-label="Choose app"></nav>
 </div>
@@ -128,6 +167,27 @@ addEventListener('keydown',e=>{if(e.key==='ArrowRight')goTo(cur+1);if(e.key==='A
 addEventListener('resize',()=>goTo(cur,false));
 let start=0;try{start=+localStorage.getItem('myapps_last')||0}catch(e){}
 if(start>=APPS.length)start=0;setCur(start);requestAnimationFrame(()=>goTo(start,false));
+
+/* Splash, then install guide (skipped when already opened as an installed app) */
+const splash=document.getElementById('splash'),guide=document.getElementById('guide'),goApps=document.getElementById('goApps'),instSelf=document.getElementById('instSelf');
+const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const short={"Receipt Archive":"Receipts","Audio Shelf":"Audio","Ice Bath Log":"Ice Bath","Tactical Baseball":"Baseball"};
+const cells=APPS.slice(0,7).map(a=>`<div><img src="${a.icon}" alt="">${short[a.name]||a.name}</div>`);
+cells.push(`<div class="new"><img src="icon-192.png" alt="">Carousel</div>`);
+while(cells.length%4)cells.push('<div><i></i></div>');
+document.getElementById('homeGrid').innerHTML=cells.join('');
+function placeTag(){const n=guide.querySelector('.new img'),ph=guide.querySelector('.phone'),t=document.getElementById('newTag');if(!n)return;const a=n.getBoundingClientRect(),b=ph.getBoundingClientRect();t.style.left=(a.right-b.left+6)+'px';t.style.top=(a.top+a.height/2-b.top-14)+'px'}
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'})}
+function openGuide(){tick();guide.classList.remove('hide');requestAnimationFrame(placeTag);goApps.focus()}
+function closeGuide(){guide.classList.add('hide');document.getElementById('help').focus({preventScroll:true})}
+goApps.onclick=closeGuide;document.getElementById('help').onclick=openGuide;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!guide.classList.contains('hide'))closeGuide()});
+addEventListener('resize',placeTag);
+let deferred=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;instSelf.hidden=false;requestAnimationFrame(placeTag)});
+instSelf.onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice.catch(()=>{});deferred=null;instSelf.hidden=true};
+addEventListener('appinstalled',()=>{instSelf.hidden=true});
+const quick=matchMedia('(prefers-reduced-motion: reduce)').matches;
+setTimeout(()=>{if(!installed)openGuide();splash.classList.add('hide')},quick?600:1500);
 </script>
 </body>
 </html>

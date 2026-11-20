@@ -1,6 +1,6 @@
 {
- "name": "My Apps",
- "short_name": "My Apps",
+ "name": "Dusiaclaw's App Carousel",
+ "short_name": "Dusiaclaw Apps",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

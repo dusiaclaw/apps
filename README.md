@@ -1,4 +1,4 @@
-# My Apps
+# Dusiaclaw's App Carousel
 
 A carousel launcher for my web apps hosted on GitHub Pages. Swipe between the apps; each card shows a screenshot, a short description, an **Open** button and a link to the source.
 
